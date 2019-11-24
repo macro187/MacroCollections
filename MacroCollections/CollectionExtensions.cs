@@ -71,8 +71,27 @@ Insert<T>(this IList<T> list, int index, T item, params T[] moreItems)
 {
     if (list == null) throw new ArgumentNullException(nameof(list));
     moreItems = moreItems ?? new T[0];
-    foreach (T i in moreItems.Reverse()) list.Insert(index, i);
-    list.Insert(index, item);
+    var items = new[] { item }.Concat(moreItems);
+    list.InsertRange(index, items);
+}
+
+
+/// <summary>
+/// Insert items into the list at the specified position
+/// </summary>
+///
+/// <exception cref="ArgumentOutOfRangeException">
+/// <paramref name="index"/> is not a valid index in the <paramref name="list"/>
+/// </exception>
+///
+public static void
+InsertRange<T>(this IList<T> list, int index, IEnumerable<T> items)
+{
+    if (list == null) throw new ArgumentNullException(nameof(list));
+    foreach (var item in items.Reverse())
+    {
+        list.Insert(index, item);
+    }
 }
 
 
