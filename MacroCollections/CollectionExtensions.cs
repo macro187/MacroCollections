@@ -98,6 +98,20 @@ InsertRange<T>(this IList<T> list, int index, IEnumerable<T> items)
 /// <summary>
 /// Add item(s) to the collection
 /// </summary>
+///
+public static void
+Add<T>(this ICollection<T> collection, T item, params T[] moreItems)
+{
+    if (collection == null) throw new ArgumentNullException(nameof(collection));
+    moreItems = moreItems ?? new T[0];
+    var items = new[] { item }.Concat(moreItems);
+    collection.AddRange(items);
+}
+
+
+/// <summary>
+/// Add item(s) to the collection
+/// </summary>
 /// 
 /// <exception cref="ArgumentNullException">
 /// <paramref name="items"/> is <c>null</c>
