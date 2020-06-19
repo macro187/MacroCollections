@@ -132,5 +132,38 @@ namespace MacroCollections.Tests
             Assert.IsTrue(list1.OrderBy(i => i).SequenceEqual(list2.OrderBy(i => i)));
         }
 
+
+        [TestMethod]
+        public void GetOrAdd_Retrieves_Existing_Elements_Without_Calling_getValue_Function()
+        {
+            var dictionary =
+                new Dictionary<string, string>
+                {
+                    { "key", "value" },
+                };
+
+            Assert.AreEqual("value", dictionary.GetOrAdd("key", () => throw new Exception("Should not be called")));
+        }
+
+
+        [TestMethod]
+        public void GetOrAdd_Adds_And_Returns_Missing_Elements()
+        {
+            var dictionary = new Dictionary<string, string>();
+
+            Assert.AreEqual("value", dictionary.GetOrAdd("key", () => "value"));
+            Assert.IsTrue(dictionary.ContainsKey("key"));
+            Assert.AreEqual("value", dictionary["key"]);
+        }
+
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void GetOrAdd_Throws_ArgumentNullException_When_getValue_Is_Null()
+        {
+            var dictionary = new Dictionary<string, string>();
+            dictionary.GetOrAdd("key", null);
+        }
+
     }
 }

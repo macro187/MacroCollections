@@ -114,5 +114,35 @@ namespace MacroCollections
             foreach (T item in items) collection.Add(item);
         }
 
+
+        /// <summary>
+        /// Get the element with the specified key, adding it if not present
+        /// </summary>
+        ///
+        /// <param name="key">
+        /// The key of the element to get (and, if not present, add)
+        /// </param>
+        ///
+        /// <param name="getValue">
+        /// Function that gets the value to add if it is not already present
+        /// </param>
+        ///
+        /// <returns>
+        /// The element with the specified key
+        /// </returns>
+        ///
+        public static TValue GetOrAdd<TKey, TValue>(
+            this IDictionary<TKey, TValue> dictionary,
+            TKey key,
+            Func<TValue> getValue)
+        {
+            if (dictionary == null) throw new ArgumentNullException(nameof(dictionary));
+            if (getValue == null) throw new ArgumentNullException(nameof(getValue));
+            return
+                dictionary.TryGetValue(key, out var value)
+                    ? value
+                    : dictionary[key] = getValue();
+        }
+
     }
 }
